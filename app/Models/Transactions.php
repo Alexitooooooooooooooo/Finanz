@@ -12,10 +12,13 @@ class Transactions extends Model
     protected $fillable = [
         'amount',
         'type',
+        'client_id',
     ];
 
-    public function clients()
+    public $timestamps = false;
+
+    public function client()
     {
-        return $this->belongsToMany(Clients::class, 'client_transaction', 'transaction_id', 'client_id');
+        return $this->belongsTo(Clients::class, 'client_id');
     }
 }

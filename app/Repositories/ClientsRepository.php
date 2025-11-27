@@ -45,4 +45,13 @@ class ClientsRepository
         }
         return false;
     }
+
+    public function allTransactionswhere(int $clientId)
+    {
+        $client = $this->find($clientId);
+        if ($client) {
+            return $client->transactions;
+        }
+        return null;
+    }
 }

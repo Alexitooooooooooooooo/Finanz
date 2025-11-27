@@ -16,7 +16,7 @@ class TransactionsRepository
 
     public function all()
     {
-        return $this->model->all();
+        return $this->model->with('client')->get();
     }
 
     public function create(array $data): Transactions
@@ -26,7 +26,7 @@ class TransactionsRepository
 
     public function find(int $id): ?Transactions
     {
-        return $this->model->find($id);
+        return $this->model->with('client')->find($id);
     }
 
     public function update(int $id, array $data): ?Transactions
@@ -69,4 +69,6 @@ class TransactionsRepository
         }
         return $user;
     }
+
+
 }

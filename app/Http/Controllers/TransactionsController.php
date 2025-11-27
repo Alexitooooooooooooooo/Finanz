@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\TransactionsRepository;
+use App\Http\Resources\TransactionsResource;
 
 class TransactionsController extends Controller
 {
@@ -17,32 +18,39 @@ class TransactionsController extends Controller
     public function index()
     {
         $transactions = $this->transactionsRepository->all();
-        return response()->json($transactions);
+        return response()->json(['message'=> 'transactions found.', 'data' => TransactionsResource::collection($transactions)]);
     }
 
-public function store(Request $request)
-{
-    $data = $request->only(['amount', 'type', 'client_id']);
-    try {
-        if ($data['type'] === 'credit') {
-            $this->transactionsRepository->addbalance($data['client_id'], $data['amount']);
-        } elseif ($data['type'] === 'debit') {
-            $this->transactionsRepository->subtractbalance($data['client_id'], $data['amount']);
+    public function store(Request $request, $id)
+    {
+        $data = $request->only(['amount', 'type']);
+        $data['client_id'] = $id;
+        try {
+            if ($data['type'] === 'credit') {
+                $this->transactionsRepository->addbalance($data['client_id'], $data['amount']);
+            } elseif ($data['type'] === 'debit') {
+                $this->transactionsRepository->subtractbalance($data['client_id'], $data['amount']);
+            }
+            $transaction = $this->transactionsRepository->create($data);
+            return response()->json($transaction, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         }
-        $transaction = $this->transactionsRepository->create($data);
-        return response()->json($transaction, 201);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 400);
     }
-}
+    
+
 
     public function show($id)
     {
-        $transaction = $this->transactionsRepository->find($id);
-        if ($transaction) {
-            return response()->json($transaction);
+        try {
+            $transaction = $this->transactionsRepository->find($id);
+            if ($transaction) {
+                return response()->json($transaction);
+            }
+            return response()->json(['message' => 'Transaction not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         }
-        return response()->json(['message' => 'Transaction not found'], 404);
     }
 
     public function update(Request $request, $id)
@@ -62,25 +70,5 @@ public function store(Request $request)
             return response()->json(['message' => 'Transaction deleted']);
         }
         return response()->json(['message' => 'Transaction not found'], 404);
-    }
-
-    public function addBalance(Request $request, $userId)
-    {
-        $amount = $request->input('amount');
-        $user = $this->transactionsRepository->addbalance($userId, $amount);
-        if ($user) {
-            return response()->json($user);
-        }
-        return response()->json(['message' => 'User not found'], 404);
-    }
-
-    public function subtractBalance(Request $request, $userId)
-    {
-        $amount = $request->input('amount');
-        $user = $this->transactionsRepository->subtractbalance($userId, $amount);
-        if ($user) {
-            return response()->json($user);
-        }
-        return response()->json(['message' => 'User not found'], 404);
     }
 }
