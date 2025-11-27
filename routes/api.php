@@ -21,13 +21,11 @@ Route::post('/clients', [ClientsController::class, 'store']);
 Route::get('/clients/{id}', [ClientsController::class, 'show']);
 Route::put('/clients/{id}', [ClientsController::class, 'update']);
 Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
-
 Route::get('/client/{clientId}/transactions', [ClientsController::class, 'showTransactions']);
 
 
 Route::post('/transactions/{id}', [TransactionsController::class, 'store']);
 Route::get('/transactions', [TransactionsController::class, 'index']);
 Route::get('/transactions/{id}', [TransactionsController::class, 'show']);
-Route::put('/transactions/{id}', [TransactionsController::class, 'update']);
-Route::delete('/transactions/{id}', [TransactionsController::class, 'destroy']);
+
 

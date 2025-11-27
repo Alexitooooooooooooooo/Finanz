@@ -24,6 +24,7 @@ class TransactionsResource extends JsonResource
             'id' => $this->id,
             'amount' => $this->amount,
             'type' => $this->type,
+            'description' => $this->description?:'',
             'transaction_date' => $this->transaction_date,
             'client_id' => $this->client_id,
             'client_name' => optional($this->client)->name,

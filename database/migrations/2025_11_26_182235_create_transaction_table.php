@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->float('amount');
+            $table->string('description')->nullable();
             $table->enum('type', ['credit', 'debit'])->default('credit');
             $table->dateTime('transaction_date')->useCurrent();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');

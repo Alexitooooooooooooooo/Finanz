@@ -13,6 +13,8 @@ class Transactions extends Model
         'amount',
         'type',
         'client_id',
+        'transaction_date',
+        'description',
     ];
 
     public $timestamps = false;
