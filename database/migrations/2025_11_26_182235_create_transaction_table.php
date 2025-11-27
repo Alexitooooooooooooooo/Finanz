@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount');
+            $table->float('amount');
             $table->enum ('type', ['credit', 'debit'])->default('credit');
             $table->timestamps();
         });

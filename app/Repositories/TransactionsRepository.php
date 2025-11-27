@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Transactions;
+use App\Models\Clients;
 
 class TransactionsRepository
 {
@@ -44,5 +45,28 @@ class TransactionsRepository
             return $transaction->delete();
         }
         return false;
+    }
+    public function addbalance(int $clientId, float $amount): ?Clients
+    {
+        $user = Clients::find($clientId);
+        if ($user) {
+            $user->balance += $amount;
+            $user->save();
+        }
+        return $user;
+    }
+
+    public function subtractbalance(int $clientId, float $amount): ?Clients
+    {
+        $user = Clients::find($clientId);
+        if ($user) {
+            if ($user->balance >= $amount) {
+                $user->balance -= $amount;
+                $user->save();
+            } else {
+                throw new \Exception('Insufficient balance');
+            }
+        }
+        return $user;
     }
 }

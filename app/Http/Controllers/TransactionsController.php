@@ -20,12 +20,21 @@ class TransactionsController extends Controller
         return response()->json($transactions);
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->only(['amount', 'type']);
+public function store(Request $request)
+{
+    $data = $request->only(['amount', 'type', 'client_id']);
+    try {
+        if ($data['type'] === 'credit') {
+            $this->transactionsRepository->addbalance($data['client_id'], $data['amount']);
+        } elseif ($data['type'] === 'debit') {
+            $this->transactionsRepository->subtractbalance($data['client_id'], $data['amount']);
+        }
         $transaction = $this->transactionsRepository->create($data);
         return response()->json($transaction, 201);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 400);
     }
+}
 
     public function show($id)
     {
@@ -53,5 +62,25 @@ class TransactionsController extends Controller
             return response()->json(['message' => 'Transaction deleted']);
         }
         return response()->json(['message' => 'Transaction not found'], 404);
+    }
+
+    public function addBalance(Request $request, $userId)
+    {
+        $amount = $request->input('amount');
+        $user = $this->transactionsRepository->addbalance($userId, $amount);
+        if ($user) {
+            return response()->json($user);
+        }
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
+    public function subtractBalance(Request $request, $userId)
+    {
+        $amount = $request->input('amount');
+        $user = $this->transactionsRepository->subtractbalance($userId, $amount);
+        if ($user) {
+            return response()->json($user);
+        }
+        return response()->json(['message' => 'User not found'], 404);
     }
 }
