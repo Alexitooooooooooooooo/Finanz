@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('balance')->default(0);
+            $table->float('balance')->default(0);
             $table->timestamps();
         });
     }

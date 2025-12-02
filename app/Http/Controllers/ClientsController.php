@@ -36,7 +36,7 @@ class ClientsController extends Controller
     {
         $data = $request->only(['user_id', 'name', 'email']);
         $client = $this->clientsRepository->create($data);
-        return response()->json($client, 201);
+        return response()->json(['message' => 'Client created.', 'data' => new ClientsResource($client)], 201);
     }
 
     public function show($id)

@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('credit_transactions', function (Blueprint $table) {
             $table->id();
-            $table->float('amount');
-            $table->string('description')->nullable();
-            $table->enum('type', ['credit', 'debit', 'payment', 'charge'])->default('credit');
-            $table->dateTime('transaction_date')->useCurrent();
+            $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
-            $table->boolean('is_pending')->default(false);
+            $table->enum('type', ['debt', 'collection'])->default('debt');
+            $table->float('amount');
             $table->boolean('use_amount')->default(false);
+            $table->timestamps();
         });
     }
 
@@ -28,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('credit_transactions');
     }
+
 };

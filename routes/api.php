@@ -27,5 +27,7 @@ Route::get('/client/{clientId}/transactions', [ClientsController::class, 'showTr
 Route::post('/transactions/{id}', [TransactionsController::class, 'store']);
 Route::get('/transactions', [TransactionsController::class, 'index']);
 Route::get('/transactions/{id}', [TransactionsController::class, 'show']);
+Route::post('/transactions/pay/{id}', [TransactionsController::class, 'storepay']);
 
 
+Route::post('/transactionscredit', [TransactionsController::class, 'storecredit']);

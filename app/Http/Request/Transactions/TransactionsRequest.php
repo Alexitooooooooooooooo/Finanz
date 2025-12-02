@@ -18,6 +18,8 @@ class TransactionsCreateRequest extends BaseRequests
             'amount' => 'required|numeric',
             'type' => 'required|in:credit,debit',
             'description' => 'sometimes|string|max:500',
+            'is_pending' => 'sometimes|boolean',
+            'use_amount' => 'sometimes|boolean',
         ];
     }
 

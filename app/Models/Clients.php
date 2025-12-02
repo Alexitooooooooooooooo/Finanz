@@ -15,6 +15,7 @@ class Clients extends Model
         'name',
         'email',
         'balance',
+        'use_amount',
     ];
 
     public function transactions()

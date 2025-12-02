@@ -3,6 +3,7 @@
 namespace App\Repositories;
 use App\Models\Transactions;
 use App\Models\Clients;
+use App\Models\CreditTransactions;
 
 class TransactionsRepository
 {
@@ -70,5 +71,63 @@ class TransactionsRepository
         return $user;
     }
 
+    public function createCreditTransaction(int $transactionId, int $clientId, string $type, float $amount, bool $useAmount): CreditTransactions
+    {
+        return CreditTransactions::create([
+            'transaction_id' => $transactionId,
+            'client_id' => $clientId,
+            'type' => $type,
+            'amount' => $amount,
+            'use_amount' => $useAmount,
+        ]);
+    }
+
+    public function addpayment(int $transactionId, Transactions $transaction, float $amount): ?CreditTransactions
+        {
+            $creditTransaction = CreditTransactions::find($transactionId);
+            if (!$creditTransaction || $creditTransaction->amount < $amount || $creditTransaction->amount < 0) {
+                throw new \Exception('Insufficient credit transaction amount');
+            }
+            $client = Clients::find($creditTransaction->client_id);
+            if (!$client) {
+                return null;
+            }
+            $creditTransaction->amount -= $amount;
+            $creditTransaction->transaction_id = $transaction->id;
+            $creditTransaction->save();
+            if (filter_var($transaction->use_amount, FILTER_VALIDATE_BOOLEAN)) {
+                $client->balance -= $amount;
+                $client->save();
+            }
+            return $creditTransaction;
+        }
+
+    public function subtractcharge(int $transactionId, Transactions $transaction, float $amount): ?CreditTransactions
+        {
+            $creditTransaction = CreditTransactions::find($transactionId);
+            if (!$creditTransaction) {
+                throw new \Exception('Credit transaction not found');
+            }
+            $client = Clients::find($creditTransaction->client_id);
+            if (!$client) {
+                return null;
+            }
+            $creditTransaction->amount += $amount;
+            $creditTransaction->transaction_id = $transaction->id;
+            $creditTransaction->save();
+            if (filter_var($transaction->use_amount, FILTER_VALIDATE_BOOLEAN)) {
+                if ($client->balance < $amount) {
+                    throw new \Exception('Insufficient client balance');
+                }
+                $client->balance += $amount;
+                $client->save();
+            }
+            return $creditTransaction;
+        }
+
+    public function findCreditTransaction(int $id): ?CreditTransactions
+    {
+        return CreditTransactions::find($id);
+    }
 
 }
