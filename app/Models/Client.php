@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class Clients extends Model
+class Client extends Model
 {
     use HasFactory;
 
@@ -20,5 +20,14 @@ class Clients extends Model
     public function transactions()
     {
         return $this->hasMany(Transactions::class, 'client_id');
+    }
+
+    public function creditTransactions()
+    {
+        return $this->hasMany(CreditTransactions::class, 'client_id');
+    }
+    public function contact()
+    {
+        return $this->hasMany(Contact::class, 'client_id');
     }
 }

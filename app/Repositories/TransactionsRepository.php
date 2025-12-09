@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Transactions;
-use App\Models\Clients;
+use App\Models\Client;
 use App\Models\CreditTransactions;
 
 class TransactionsRepository
@@ -47,9 +47,9 @@ class TransactionsRepository
         }
         return false;
     }
-    public function addbalance(int $clientId, float $amount): ?Clients
+    public function addbalance(int $clientId, float $amount): ?Client
     {
-        $user = Clients::find($clientId);
+        $user = Client::find($clientId);
         if ($user) {
             $user->balance += $amount;
             $user->save();
@@ -57,9 +57,9 @@ class TransactionsRepository
         return $user;
     }
 
-    public function subtractbalance(int $clientId, float $amount): ?Clients
+    public function subtractbalance(int $clientId, float $amount): ?Client
     {
-        $user = Clients::find($clientId);
+        $user = Client::find($clientId);
         if ($user) {
             if ($user->balance >= $amount) {
                 $user->balance -= $amount;
@@ -88,7 +88,7 @@ class TransactionsRepository
             if (!$creditTransaction || $creditTransaction->amount < $amount || $creditTransaction->amount < 0) {
                 throw new \Exception('Insufficient credit transaction amount');
             }
-            $client = Clients::find($creditTransaction->client_id);
+            $client = Client::find($creditTransaction->client_id);
             if (!$client) {
                 return null;
             }
@@ -108,7 +108,7 @@ class TransactionsRepository
             if (!$creditTransaction) {
                 throw new \Exception('Credit transaction not found');
             }
-            $client = Clients::find($creditTransaction->client_id);
+            $client = Client::find($creditTransaction->client_id);
             if (!$client) {
                 return null;
             }

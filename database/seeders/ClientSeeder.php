@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use GuzzleHttp\Client;
+// use GuzzleHttp\Client;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Clients;
+use App\Models\Client;
 
 class ClientSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class ClientSeeder extends Seeder
      */
     public function run(): void
     {
-        Clients::create([
+        Client::create([
             'user_id' => 1,
             'name' => 'Javier',
             'email' => 'Javieralexfeik1@gmail.com',

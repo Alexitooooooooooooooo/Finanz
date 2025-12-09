@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Repositories;
-use App\Models\Clients;
+use App\Models\Client;
 
 class ClientsRepository
 {
@@ -10,7 +10,7 @@ class ClientsRepository
 
     public function __construct()
     {
-        $this->model = new Clients();
+        $this->model = new Client();
     }
 
     public function all()
@@ -18,17 +18,17 @@ class ClientsRepository
         return $this->model->all();
     }
 
-    public function create(array $data): Clients
+    public function create(array $data): Client
     {
         return $this->model->create($data);
     }
 
-    public function find(int $id): ?Clients
+    public function find(int $id): ?Client
     {
         return $this->model->find($id);
     }
 
-    public function update(int $id, array $data): ?Clients
+    public function update(int $id, array $data): ?Client
     {
         $client = $this->find($id);
         if ($client) {

@@ -16,17 +16,20 @@ class AuthController extends Controller{
 
     public function me(Request $request): JsonResponse
     {
-            $user = $request->user();
-            return response()->json([
-                'success' => true,
-                'user' => [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                    'created_at' => $user->created_at,
-                    'updated_at' => $user->updated_at,
-
-                ]
-            ], 200);    }
+        $user = $request->user();
+        $client = $user->clients()->first();
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+                'amount' => $client ? $client->balance : null,
+                'name' => $client ? $client->name : null,
+            ]
+        ], 200);
+    }
 
     public function login(AuthRequest $request): JsonResponse
     {
