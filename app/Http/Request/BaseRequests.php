@@ -28,6 +28,7 @@ class BaseRequests extends FormRequest
             "client_id.required" => "CLIENT_ID_REQUIRED",
             "client_id.integer" => "CLIENT_ID_FORMAT_INVALID",
             "client_id.exists" => "CLIENT_ID_NOT_FOUND",
+            
 
         ];
     }

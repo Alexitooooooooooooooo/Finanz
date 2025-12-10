@@ -17,7 +17,6 @@ class UserUpdateRequest extends BaseRequests
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email',
             'password' => 'sometimes|string|min:8|confirmed',
-            'username' => 'sometimes|string|max:50|unique:users,username',
         ];
     }
 

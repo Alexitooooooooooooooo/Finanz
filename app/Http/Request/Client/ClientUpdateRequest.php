@@ -16,6 +16,7 @@ class ClientUpdateRequest extends FormRequest
         return [
             'name' => 'sometimes|max:255|unique:clients,name',
             'email' => 'sometimes|email|unique:clients,email',
+            'username' => 'sometimes|max:255|unique:clients,username',
         ];
     }
 

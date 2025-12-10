@@ -19,6 +19,7 @@ class ClientsResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'name' => $this->name,
+            'username' => $this->username,
             'email' => $this->email,
             'balance' => $this->balance ?: 0,
             'created_at' => $this->created_at,

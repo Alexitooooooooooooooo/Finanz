@@ -16,6 +16,7 @@ class ClientCreateRequest extends BaseRequests
         return [
             'user_id' => 'required|integer|exists:users,id',
             'name' => 'required|max:255|unique:clients,name',
+            'username' => 'required|max:255|unique:clients,username',
             'email' => 'required|email|unique:clients,email',
         ];
     }
